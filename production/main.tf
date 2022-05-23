@@ -1,3 +1,13 @@
+// OpenVPN Access Server
+module "vpn" {
+  source    = "../terraform-modules/vpn-access-server"
+  vpc_id    = "vpc-3"
+  subnet_id = "subnet-054a"
+  key_name  = "tfkey"
+  username  = "dong"
+  password  = "helloworld123"
+}
+
 // AWS Secret Manager
 module "secret" {
   source      = "../terraform-modules/secret-manager"
@@ -14,7 +24,6 @@ module "instance_profile" {
   depends_on = [
     module.secret
   ]
-
   // Allow instance get scret value from AWS secret manager service
   source              = "../terraform-modules/iam-instance-profile"
   profile_name        = "testInstanceProfile"
