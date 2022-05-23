@@ -1,5 +1,20 @@
+// AWS Secret Manager
+module "secret" {
+  source      = "../terraform-modules/secret-manager"
+  secret_name = "tfmodtest"
+  secret_value = {
+    Name     = "DongNguyen"
+    Age      = "24"
+    Username = "dongnguyenltqb"
+  }
+}
+
 // AWS IAM Instace profile
 module "instance_profile" {
+  depends_on = [
+    module.secret
+  ]
+
   // Allow instance get scret value from AWS secret manager service
   source              = "../terraform-modules/iam-instance-profile"
   profile_name        = "testInstanceProfile"
@@ -15,7 +30,7 @@ module "instance_profile" {
             "secretsmanager:DescribeSecret"
           ],
           Resource : [
-            "*"
+            module.secret.secret_id
           ]
         }
       ]
